@@ -57,6 +57,19 @@ def main():
             thinkCollapsed: thinks.filter(t => !t.getAttribute('data-open')).length,
             nativeThinkVisible: document.querySelectorAll('[data-variant="think"]:not([data-drw-hidethink])').length,
             nativeThinkHidden: document.querySelectorAll('[data-variant="think"][data-drw-hidethink="1"]').length,
+            // a visible native Think that still has a slide somewhere in its
+            // segment would be a duplicate of the slide's own Think row
+            nativeVisibleInSlideSeg: Array.from(document.querySelectorAll('[data-variant="think"]:not([data-drw-hidethink])')).filter(t => {
+              let r = t.closest('[data-chat-flow-kind]');
+              let c = 0;
+              while (r && c < 30) {
+                r = r.previousElementSibling;
+                c++;
+                if (r && r.querySelector && r.querySelector('.drw-slide')) return true;
+                if (r && r.getAttribute && r.getAttribute('data-chat-flow-kind') === 'user') break;
+              }
+              return false;
+            }).length,
           };
         }""")
         assert info["slides"] >= 1, "no slides rendered"
@@ -73,7 +86,7 @@ def main():
 
         if info["thinks"]:
             assert info["thinkExpanded"] == 0, "think rows should be collapsed by default (one line each)"
-            assert info["nativeThinkVisible"] == 0, "native Think rows should be hidden once inside a slide"
+            assert info["nativeVisibleInSlideSeg"] == 0, "a native Think inside a slide segment is still visible (duplicate)"
         print("PASS slides:", info["slides"], "heads:", json.dumps(info["heads"], ensure_ascii=False),
               "calls:", info["calls"], "thinks:", info["thinks"],
               "(native hidden:", info["nativeThinkHidden"], "/ visible:", info["nativeThinkVisible"], ")")
