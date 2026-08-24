@@ -15,6 +15,10 @@ DeepSeek Harness (DSH) Web 插件：把「上一个用户 prompt → 下一个�
 - **回复文本** → 超过窗口的行数后自动限高 + 内部滚动 + 渐变遮罩 + 「展开全部/收起」按钮，原生 Markdown 渲染不变
 - 用户消息始终是「slide 之间的分隔点」，保持原位
 
+真实 DSH Web 实例上的效果（每个响应一个 slide，内部滚动窗口）：
+
+![preview](docs/preview.png)
+
 ## 安装
 
 ```bash
@@ -52,12 +56,19 @@ dsh plugin --profile web add "link:$(pwd)"
 - 长回复文本窗口是对原生 `_markdown` 元素加类 + CSS（同 `dsh-toolbox-web` 长消息折叠的手法），无 DOM 重挂、无删除。
 - 插件只读 session 快照（`useSession`），不写快照、不调宿主 API。
 
-## 开发
+## 开发 / 测试
 
 纯 JS，无构建步骤：
 
 ```bash
 npm run check   # node --check lib/index.js && node --check lib/client.js
+```
+
+E2E（需要已启动的 `dsh web` 与 python playwright）：
+
+```bash
+dsh --profile web --no-open --port 3639 &
+python3 test/e2e.py --url http://127.0.0.1:3639 --session "架构重构不顺原因分析"
 ```
 
 - 宿主半：`lib/index.js`（无依赖）
