@@ -1,4 +1,4 @@
-# dsh-response-window bundle patch
+# dsh-plugin-response-window bundle patch
 #
 # Inserts the plugin row into the web profile roster. The row runs the host
 # half (exports ".") in the host process and — via the `dsh.client` declaration
@@ -18,8 +18,8 @@
 #                     this many tool calls (default 3; only used with
 #                     collapsed=true).
 - insert:
-    - id: dsh-response-window
-      name: 'dsh-response-window'
+    - id: dsh-plugin-response-window
+      name: 'dsh-plugin-response-window'
       config:
         lines: 10
         collapsed: false

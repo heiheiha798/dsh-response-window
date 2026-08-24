@@ -1,4 +1,4 @@
-# dsh-response-window
+# dsh-plugin-response-window
 
 DeepSeek Harness (DSH) Web 插件：把一轮里的 think（推理）和工具调用放进**有限高度的可滚动窗口**（默认 10 行），以**阶段性文字回复为界分段**，每个分段一个 **slide**；文字回复保持原生完整显示、不做限高。中间过程**始终可见**（只是不撑爆页面）——Grok Build 风格。
 
@@ -26,20 +26,20 @@ DeepSeek Harness (DSH) Web 插件：把一轮里的 think（推理）和工具�
 ## 安装
 
 ```bash
-dsh plugin --profile web add github:heiheiha798/dsh-response-window
+dsh plugin --profile web add github:heiheiha798/dsh-plugin-response-window
 ```
 
 或本地 link 方式（开发调试）：
 
 ```bash
-git clone https://github.com/heiheiha798/dsh-response-window.git
-cd dsh-response-window
+git clone https://github.com/heiheiha798/dsh-plugin-response-window.git
+cd dsh-plugin-response-window
 dsh plugin --profile web add "link:$(pwd)"
 ```
 
 装完重启 `dsh web`（或等 profile HMR）生效。
 
-卸载：`dsh plugin --profile web remove dsh-response-window`
+卸载：`dsh plugin --profile web remove dsh-plugin-response-window`
 
 ## 配置
 
@@ -57,7 +57,7 @@ dsh plugin --profile web add "link:$(pwd)"
 插件在 Web UI 的 **Settings → General** 里注册了一项 **「响应窗口大小（行数）」**：
 
 - `−` / 数值输入 / `+`：调整 `lines`（0–200，`0` = 不限高，默认 10）
-- **即时生效**：改动后已渲染的 slide 高度立刻变化（经宿主 settings namespace `dsh-response-window` 持久化）
+- **即时生效**：改动后已渲染的 slide 高度立刻变化（经宿主 settings namespace `dsh-plugin-response-window` 持久化）
 
 ## 实现说明（为什么安全）
 
