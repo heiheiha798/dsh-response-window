@@ -1,0 +1,12 @@
+{
+  "name": "dsh-response-window",
+  "description": "DeepSeek Harness web 插件：每个 prompt 之间的整段响应（工具调用 + 回复文本）放进一个有限高度的可滚动窗口（默认 10 行），中间过程始终可见，Grok build 风格。",
+  "version": "0.1.0",
+  "entry": {
+    "name": "dsh-response-window",
+    "inject": []
+  },
+  "client": {
+    "platform": "web"
+  }
+}

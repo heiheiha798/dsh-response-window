@@ -1,0 +1,29 @@
+# dsh-response-window bundle patch
+#
+# Inserts the plugin row into the web profile roster. The row runs the host
+# half (exports ".") in the host process and — via the `dsh.client` declaration
+# in package.json — the browser half (exports "./client", served at
+# /plugins/<id>/client.js) in the web GUI.
+#
+# Row config (all optional):
+#   lines             window height in lines (default 10). 0 disables the
+#                     height cap (blocks render at natural height).
+#   collapsed         start every turn slide collapsed to a one-line bar
+#                     instead of always-expanded (default false: content stays
+#                     visible, just bounded).
+#   showReadOnly      list read / grep / glob / web_search etc. in the slide
+#                     (default true: nothing is hidden by default).
+#   wrapAssistantText apply the same bounded window to long assistant markdown
+#                     (default true).
+#   minCollapseRows   only auto-collapse a finished slide when it has at least
+#                     this many tool calls (default 3; only used with
+#                     collapsed=true).
+- insert:
+    - id: dsh-response-window
+      name: 'dsh-response-window'
+      config:
+        lines: 10
+        collapsed: false
+        showReadOnly: true
+        wrapAssistantText: true
+        minCollapseRows: 3

@@ -1,0 +1,57 @@
+{
+  "name": "dsh-response-window",
+  "version": "0.1.0",
+  "description": "DeepSeek Harness (DSH) web plugin: per-turn response window. Each turn's tool calls collapse into ONE always-expanded bounded slide (configurable N-line window, inner scroll, nothing hidden), and long assistant markdown gets a bounded scroll window too — Grok-build style, keeps every intermediate response visible inside a finite window.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-slots"
+      ]
+    }
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "cordis.patch.yml",
+    "dsh.plugin.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "check": "node --check lib/index.js && node --check lib/client.js"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heiheiha798/dsh-response-window.git"
+  },
+  "homepage": "https://github.com/heiheiha798/dsh-response-window#readme",
+  "bugs": {
+    "url": "https://github.com/heiheiha798/dsh-response-window/issues"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "dsh",
+    "response-window",
+    "tool-call",
+    "slide",
+    "web-ui"
+  ]
+}
