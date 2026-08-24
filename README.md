@@ -11,7 +11,7 @@ DeepSeek Harness (DSH) Web 插件：把一轮里的 think（推理）和工具�
 
 - **think（推理）和工具调用** → 合并为 slide（think 与 tool call 都是 implementation，不做区分）：
   - **以「阶段性文字回复」为界分段**：模型中途直接返回给用户的每条文字 response 是天然分隔点；两个分隔点之间的一段 think+bash 是一个 slide。不会两个 input prompt 之间挤成一整个 slide
-  - 头部：`🔧 响应 N·段2/12 · 10 个工具调用 · 5 Think`（单段时简写为 `响应 N`）+ 进行中 / 失败徽标，可点击收起/展开
+  - 头部：`10 个工具调用 · 5 Think`（无 emoji、无冗余序号）+ 进行中 / 失败徽标，可点击收起/展开
   - 主体：`max-height: N 行`（默认 10）的**内部滚动区**
     - **think 与工具调用严格按真实输出顺序交错排列**（不做「think 全在上 / bash 全在下」的强行分区）
     - 每段 think 一行（Think + 单行摘要 + 展开箭头），默认折叠，点击展开完整推理（内部限高滚动）；展开文字与工具输出同字号（同一 mono 字体）
