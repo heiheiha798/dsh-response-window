@@ -52,7 +52,6 @@ def main():
               return bb.style.maxHeight !== '' && cs.overflowY === 'auto';
             }),
             scrollableAny: Array.from(document.querySelectorAll('.drw-slide .drw-body')).some(bb => bb.scrollHeight > bb.clientHeight),
-            mdWindows: document.querySelectorAll('.drw-md.drw-md-capped').length,
             calls: document.querySelectorAll('.drw-call').length,
             thinks: thinks.length,
             thinkExpanded: thinks.filter(t => t.getAttribute('data-open') === '1').length,
@@ -68,7 +67,7 @@ def main():
             assert info["thinkExpanded"] == 0, "think rows should be collapsed by default (one line each)"
             assert info["nativeThinkVisible"] == 0, "native Think rows should be hidden once inside a slide"
         print("PASS slides:", info["slides"], "heads:", json.dumps(info["heads"], ensure_ascii=False),
-              "calls:", info["calls"], "mdWindows:", info["mdWindows"], "thinks:", info["thinks"],
+              "calls:", info["calls"], "thinks:", info["thinks"],
               "(native hidden:", info["nativeThinkHidden"], "/ visible:", info["nativeThinkVisible"], ")")
 
         # a think row is a single collapsed line and expands on click

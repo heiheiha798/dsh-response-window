@@ -13,7 +13,6 @@
 #                     visible, just bounded).
 #   showReadOnly      list read / grep / glob / web_search etc. in the slide
 #                     (default true: nothing is hidden by default).
-#   wrapAssistantText apply the same bounded window to long assistant markdown
 #                     (default true).
 #   minCollapseRows   only auto-collapse a finished slide when it has at least
 #                     this many tool calls (default 3; only used with
@@ -25,5 +24,4 @@
         lines: 10
         collapsed: false
         showReadOnly: true
-        wrapAssistantText: true
         minCollapseRows: 3
