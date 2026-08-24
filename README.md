@@ -11,7 +11,7 @@ DeepSeek Harness (DSH) Web 插件：把一轮里的 think（推理）和工具�
 
 - **think（推理）和工具调用** → 合并为 slide（think 与 tool call 都是 implementation，不做区分）：
   - **以「阶段性文字回复」为界分段**：模型中途直接返回给用户的每条文字 response 是天然分隔点；两个分隔点之间的一段 think+bash 是一个 slide。不会两个 input prompt 之间挤成一整个 slide
-  - 头部：`🔧 响应 N·段2/12 · 10 个工具调用 · 5 段思考`（单段时简写为 `响应 N`）+ 进行中 / 失败徽标，可点击收起/展开
+  - 头部：`🔧 响应 N·段2/12 · 10 个工具调用 · 5 Think`（单段时简写为 `响应 N`）+ 进行中 / 失败徽标，可点击收起/展开
   - 主体：`max-height: N 行`（默认 10）的**内部滚动区**
     - **think 与工具调用严格按真实输出顺序交错排列**（不做「think 全在上 / bash 全在下」的强行分区）
     - 每段 think 一行（💭 + 单行摘要 + 展开箭头），默认折叠，点击展开完整推理（内部限高滚动）；展开文字与工具输出同字号（同一 mono 字体）
@@ -66,7 +66,7 @@ dsh plugin --profile web add "link:$(pwd)"
 
 - 工具调用 slide 通过 `conversation.chat.node`（`tool-call` key，`priority: -100`）的 **slot shadow** 在 React 层实现：每轮第一个 tool-call 节点渲染整个 slide，同轮其余 tool-call 节点渲染空，任何渲染异常自动 abdicate 回内置渲染。
 - **绝不移走 React 拥有的 `[data-chat-anchor-key]` 行节点**。实测：把行移进自定义容器后，一旦 DSH 后续移除该行（会话切换/编辑/压缩），React 会调用 `parent.removeChild(row)` 抛 `NotFoundError`，整个会话树被卸载——因此本插件只用「slot shadow + 类/CSS」两种方式，对 React 行结构零改动。
-- 原生 Think 行隐藏与 slide 内的 think 同步：只对「该段内有 slide」的原生 `data-variant="think"` 行加 `display:none`（DOM 类/CSS，无重挂、无删除），其余（无工具调用的纯思考段）保持原生显示。
+- 原生 Think 行隐藏与 slide 内的 think 同步：只对「该段内有 slide」的原生 `data-variant="think"` 行加 `display:none`（DOM 类/CSS，无重挂、无删除），其余（无工具调用的纯 Think 段）保持原生显示。
 - 插件只读 session 快照（`useSession`），不写快照、不调宿主 API。
 
 ## 开发 / 测试

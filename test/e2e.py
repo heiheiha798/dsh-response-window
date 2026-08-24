@@ -51,7 +51,6 @@ def main():
               const cs = getComputedStyle(bb);
               return bb.style.maxHeight !== '' && cs.overflowY === 'auto';
             }),
-            scrollableAny: Array.from(document.querySelectorAll('.drw-slide .drw-body')).some(bb => bb.scrollHeight > bb.clientHeight),
             calls: document.querySelectorAll('.drw-call').length,
             thinks: thinks.length,
             thinkExpanded: thinks.filter(t => t.getAttribute('data-open') === '1').length,
@@ -62,7 +61,16 @@ def main():
         }""")
         assert info["slides"] >= 1, "no slides rendered"
         assert info["bounded"], "not all tool-slide bodies are bounded"
-        assert info["scrollableAny"], "no bounded body is actually scrollable (check session has a long turn)"
+
+        # With per-response segmentation each segment is usually short and fits
+        # without scrolling, so prove the mechanism directly: clamp bodies to a
+        # tiny height (DOM-only, nothing persisted) and require a real overflow
+        # -> the bounded window genuinely scrolls.
+        pg.evaluate("() => { const bs = Array.from(document.querySelectorAll('.drw-slide .drw-body')); bs.forEach(b => { b.style.maxHeight = '40px'; }); }")
+        pg.wait_for_timeout(250)
+        scrollable = pg.evaluate("Array.from(document.querySelectorAll('.drw-slide .drw-body')).some(bb => bb.scrollHeight > bb.clientHeight)")
+        assert scrollable, "no bounded body overflows once clamped (check session has content)"
+
         if info["thinks"]:
             assert info["thinkExpanded"] == 0, "think rows should be collapsed by default (one line each)"
             assert info["nativeThinkVisible"] == 0, "native Think rows should be hidden once inside a slide"
