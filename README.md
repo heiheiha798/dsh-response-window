@@ -8,10 +8,13 @@ DeepSeek Harness (DSH) Web 插件：把「上一个用户 prompt → 下一个�
 
 一个 prompt 之后有 100 次 tool call + 长回复时：
 
-- **工具调用** → 压缩为 1 个 slide：
-  - 头部：`🔧 响应 N · 100 个工具调用` + 进行中 / 失败徽标，可点击收起/展开
-  - 主体：`max-height: N 行`（默认 10）的**内部滚动区**，每条调用一行（状态点 + 工具名 + 单行摘要），点击展开参数/输出（输出再限高一档，内部滚动）
+- **think（推理）和工具调用** → 合并为同一个 slide（input prompt 之间的 think 与 tool call 都是 implementation，不做区分）：
+  - 头部：`🔧 响应 N · 100 个工具调用 · 12 段思考` + 进行中 / 失败徽标，可点击收起/展开
+  - 主体：`max-height: N 行`（默认 10）的**内部滚动区**
+    - 每段 think 一行（💭 + 单行摘要 + 展开箭头），默认折叠，点击展开完整推理（内部限高滚动）；外观与工具行一致
+    - 每条工具调用一行（状态点 + 工具名 + 单行摘要），点击展开参数/输出（输出再限高一档，内部滚动）
   - 执行中自动跟随底部
+- **原生 Think 行从消息流中隐藏**（同一轮次已并入 slide，避免重复显示），与 slide 内展示共用同一份内容
 - **回复文本** → 超过窗口的行数后自动限高 + 内部滚动 + 渐变遮罩 + 「展开全部/收起」按钮，原生 Markdown 渲染不变
 - 用户消息始终是「slide 之间的分隔点」，保持原位
 
@@ -49,6 +52,14 @@ dsh plugin --profile web add "link:$(pwd)"
 | `wrapAssistantText` | `true` | 是否给超长回复文本加限高滚动窗口 |
 | `minCollapseRows` | `3` | 仅 `collapsed: true` 时生效：少于该数量的轮次不收起 |
 
+### 设置页（Settings → General）
+
+插件在 Web UI 的 **Settings → General** 里注册了一项 **「响应窗口大小（行数）」**：
+
+- `−` / 数值输入 / `+`：调整 `lines`（0–200，`0` = 不限高）
+- 「重置」：恢复默认 10 行
+- **即时生效**：改动后已渲染的 slide 高度立刻变化（经宿主 settings namespace `dsh-response-window` 持久化）
+
 ## 实现说明（为什么安全）
 
 - 工具调用 slide 通过 `conversation.chat.node`（`tool-call` key，`priority: -100`）的 **slot shadow** 在 React 层实现：每轮第一个 tool-call 节点渲染整个 slide，同轮其余 tool-call 节点渲染空，任何渲染异常自动 abdicate 回内置渲染。
@@ -71,8 +82,8 @@ dsh --profile web --no-open --port 3639 &
 python3 test/e2e.py --url http://127.0.0.1:3639 --session "架构重构不顺原因分析"
 ```
 
-- 宿主半：`lib/index.js`（无依赖）
-- 浏览器半：`lib/client.js`（`window.__ModuleLoader__.load`，依赖 web 运行时注入的 `react` 与 slots）
+- 宿主半：`lib/index.js`（注册 settings namespace，依赖 `@deepseek-ai/schemastery`）
+- 浏览器半：`lib/client.js`（`window.__ModuleLoader__.load`，依赖 web 运行时注入的 `react`、slots 与 settings scope）
 
 ## License
 
